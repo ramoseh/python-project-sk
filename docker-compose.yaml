@@ -1,9 +1,38 @@
 version: '3'
 services:
-    core_api:
-        build: .
-        container_name: "api-container"
-        ports: 
-            - "8000:15400"
+      api:
+        container_name: project-backend
+        build:
+          context: ./
+        image: backend
+        depends_on:
+          - db
+        ports:
+          - 8000:15400
+        environment:
+          NODE_ENV: develop
+          DB_PORT: 5432
+          DB_USER: admin
+          DB_PASSWORD: Passw0rd
+          DB_NAME: sk-project
+        links:
+          - db
+        volumes:
+          - ./app/:/app
+
+      db:
+        container_name: project-db
+        image: postgres
+        restart: always
+        environment:
+          - POSTGRES_USER=admin
+          - POSTGRES_PASSWORD=Passw0rd
+          - POSTGRES_DB=sk-project
+          - POSTGRES_HOST_AUTH_METHOD=trust
+        ports:
+          - '5432:5432'
         volumes: 
-            - ./app/:/app
+          - db:/var/lib/postgresql/data
+volumes:
+    db:
+      driver: local
