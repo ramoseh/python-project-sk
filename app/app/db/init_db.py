@@ -4,7 +4,6 @@ from app import crud, schemas
 from app.core.config import settings
 
 
-
 def init_db(db: Session) -> None:
     # Tables should be created with Alembic migrations
     # But if you don't want to use migrations, create
